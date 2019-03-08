@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Burger from "../../components/Burger/Burger";
 import BuildControls from "../../components/Burger/BuildControls/BuildControls";
-import { Ingredients } from "../../interface";
+import { Ingredient, Ingredients, IngredientsCount } from "../../interface";
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -9,8 +9,9 @@ const INGREDIENT_PRICES = {
   meat: 1.3,
   bacon: 0.7
 };
+
 interface BurgerBuilderState {
-  ingredients: Record<Ingredients, number>;
+  ingredients: {[key: string]: any};
   totalPrice: number;
 }
 export default class BurgerBuilder extends Component<any, BurgerBuilderState> {
@@ -24,7 +25,7 @@ export default class BurgerBuilder extends Component<any, BurgerBuilderState> {
     totalPrice: 4
   };
 
-  addIngredientHandler = (type: Ingredients) => {
+  addIngredientHandler = (type: Ingredient) => {
     const oldCount = this.state.ingredients[type];
     const updatedCount = oldCount + 1;
     const updatedIngredients = {
@@ -37,13 +38,39 @@ export default class BurgerBuilder extends Component<any, BurgerBuilderState> {
     this.setState({ totalPrice: newPrice, ingredients: updatedIngredients });
   };
 
-  removeIngredientHandler = (type: string) => {};
+  removeIngredientHandler = (type: Ingredient) => {
+    const oldCount = this.state.ingredients[type];
+    if (oldCount <= 0) {
+      return;
+    }
+    const updatedCount = oldCount - 1;
+    const updatedIngredients = {
+      ...this.state.ingredients
+    };
+    updatedIngredients[type] = updatedCount;
+    const priceDeduction = INGREDIENT_PRICES[type];
+    const oldPrice = this.state.totalPrice;
+    const newPrice = oldPrice - priceDeduction;
+    this.setState({ totalPrice: newPrice, ingredients: updatedIngredients });
+  };
 
   render() {
+    const disabledInfo = {
+      ...this.state.ingredients
+    };
+
+    for (const key in disabledInfo) {
+      disabledInfo[key] = Number(disabledInfo[key] <= 0);
+    }
+
     return (
       <React.Fragment>
         <Burger ingredients={this.state.ingredients} />
-        <BuildControls  ingredientAdded={this.addIngredientHandler}/>
+        <BuildControls
+          disabled={disabledInfo}
+          ingredientAdded={this.addIngredientHandler}
+          ingredientRemoved={this.removeIngredientHandler}
+        />
       </React.Fragment>
     );
   }

@@ -1,18 +1,20 @@
 import React, { Component } from "react";
 import BuildControl from "./BuildControl/BuildControl";
-import { Ingredients } from "../../../interface";
+import { Ingredients, Ingredient } from "../../../interface";
 
 import "./BuildControls.css";
 
 interface BurgerProps {
-  ingredientAdded: (type: Ingredients) => void;
+  disabled: Ingredients
+  ingredientAdded: (type: Ingredient) => void;
+  ingredientRemoved: (type: Ingredient) => void;
 }
 
 const controls = [
-  { label: "Salad", type: Ingredients.salad },
-  { label: "Bacon", type: Ingredients.bacon },
-  { label: "Cheese", type: Ingredients.cheese },
-  { label: "Meat", type: Ingredients.meat }
+  { label: "Salad", type: Ingredient.salad },
+  { label: "Bacon", type: Ingredient.bacon },
+  { label: "Cheese", type: Ingredient.cheese },
+  { label: "Meat", type: Ingredient.meat }
 ];
 
 const BuildControls: React.SFC<BurgerProps> = props => {
@@ -24,6 +26,8 @@ const BuildControls: React.SFC<BurgerProps> = props => {
             key={ctrl.label}
             label={ctrl.label}
             added={() => props.ingredientAdded(ctrl.type)}
+            removed={() => props.ingredientRemoved(ctrl.type)}
+            disabled={props.disabled[ctrl.type]}
           />
         );
       })}
