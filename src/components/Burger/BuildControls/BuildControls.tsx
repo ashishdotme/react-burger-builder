@@ -5,7 +5,9 @@ import { Ingredients, Ingredient } from "../../../interface";
 import "./BuildControls.css";
 
 interface BurgerProps {
-  disabled: Ingredients
+  disabled: Ingredients;
+  price: number;
+  purchasable: boolean;
   ingredientAdded: (type: Ingredient) => void;
   ingredientRemoved: (type: Ingredient) => void;
 }
@@ -20,6 +22,9 @@ const controls = [
 const BuildControls: React.SFC<BurgerProps> = props => {
   return (
     <div className="BuildControls">
+      <p>
+        Current price <strong>{props.price.toFixed(2)}</strong>
+      </p>
       {controls.map(ctrl => {
         return (
           <BuildControl
@@ -31,6 +36,9 @@ const BuildControls: React.SFC<BurgerProps> = props => {
           />
         );
       })}
+      <button className="OrderButton" disabled={!props.purchasable}>
+        Order Now
+      </button>
     </div>
   );
 };
