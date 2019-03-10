@@ -11,17 +11,18 @@ const INGREDIENT_PRICES = {
   bacon: 0.7
 };
 
-type Ingredient = 'salad' | 'bacon' | 'cheese' | 'meat';
+type Ingredient = "salad" | "bacon" | "cheese" | "meat";
 interface BurgerBuilderState {
   ingredients: {
-    salad: number | boolean,
-    bacon: number | boolean,
-    cheese: number | boolean,
-    meat: number | boolean,
+    salad: number | boolean;
+    bacon: number | boolean;
+    cheese: number | boolean;
+    meat: number | boolean;
     [key: string]: number | boolean;
   };
   totalPrice: number;
   purchasable: boolean;
+  purchasing: boolean;
 }
 export default class BurgerBuilder extends Component<any, BurgerBuilderState> {
   state = {
@@ -32,7 +33,8 @@ export default class BurgerBuilder extends Component<any, BurgerBuilderState> {
       meat: 0
     },
     totalPrice: 4,
-    purchasable: false
+    purchasable: false,
+    purchasing: false
   };
 
   updatePurchaseState(ingredients: any) {
@@ -78,6 +80,18 @@ export default class BurgerBuilder extends Component<any, BurgerBuilderState> {
     this.updatePurchaseState(updatedIngredients);
   };
 
+  purchaseHandler = () => {
+    this.setState({ purchasing: true });
+  };
+
+  purchaseCancelHandler = () => {
+    this.setState({ purchasing: false });
+  };
+
+  purchaseContinueHandler = () => {
+    alert("You can continue");
+  };
+
   render() {
     const disabledInfo: any = {
       ...this.state.ingredients
@@ -89,8 +103,15 @@ export default class BurgerBuilder extends Component<any, BurgerBuilderState> {
 
     return (
       <React.Fragment>
-        <Modal>
-          <OrderSummary ingredients={this.state.ingredients} />
+        <Modal
+          show={this.state.purchasing}
+          modalClosed={this.purchaseCancelHandler}
+        >
+          <OrderSummary
+            ingredients={this.state.ingredients}
+            purchaseCanceled={this.purchaseCancelHandler}
+            purchaseContinued={this.purchaseContinueHandler}
+          />
         </Modal>
         <Burger ingredients={this.state.ingredients} />
         <BuildControls
@@ -98,6 +119,7 @@ export default class BurgerBuilder extends Component<any, BurgerBuilderState> {
           ingredientAdded={this.addIngredientHandler}
           ingredientRemoved={this.removeIngredientHandler}
           purchasable={this.state.purchasable}
+          ordered={this.purchaseHandler}
           price={this.state.totalPrice}
         />
       </React.Fragment>

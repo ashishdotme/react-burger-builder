@@ -8,6 +8,7 @@ interface BurgerProps {
   disabled: Ingredients;
   price: number;
   purchasable: boolean;
+  ordered: () => void;
   ingredientAdded: (type: Ingredient) => void;
   ingredientRemoved: (type: Ingredient) => void;
 }
@@ -36,7 +37,11 @@ const BuildControls: React.SFC<BurgerProps> = props => {
           />
         );
       })}
-      <button className="OrderButton" disabled={!props.purchasable}>
+      <button
+        className="OrderButton"
+        onClick={props.ordered}
+        disabled={!props.purchasable}
+      >
         Order Now
       </button>
     </div>
