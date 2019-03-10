@@ -1,5 +1,7 @@
 import React, { ReactElement } from "react";
-import "./Layout.css"
+import Toolbar from "../Navigation/Toolbar/Toolbar";
+import "./Layout.css";
+import SideDrawer from "../Navigation/SideDrawer/SideDrawer";
 
 interface LayoutProps {
   children: ReactElement<any, any>;
@@ -8,7 +10,8 @@ interface LayoutProps {
 const layout: React.SFC<LayoutProps> = props => {
   return (
     <React.Fragment>
-      <div>Toolbar Sidedrawer Backdrop</div>
+      <Toolbar />
+      <SideDrawer />
       <main className="content">{props.children}</main>
     </React.Fragment>
   );
