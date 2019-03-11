@@ -1,13 +1,17 @@
 import React from "react";
 import NavigationItems from "../NavigationItems/NavigationItems";
+import DrawerToggle from "../SideDrawer/DrawerToggle/DrawerToggle";
 
 import "./Toolbar.css";
 
-const Toolbar = () => {
+interface ToolbarProps {
+  drawerToggleClicked: () => void;
+}
+const Toolbar: React.SFC<ToolbarProps> = props => {
   return (
     <div>
       <header className="Toolbar">
-        <div>MENU</div>
+        <DrawerToggle clicked={props.drawerToggleClicked} />
         <nav className="DesktopOnly">
           <NavigationItems />
         </nav>

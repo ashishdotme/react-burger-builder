@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, Component } from "react";
 import Toolbar from "../Navigation/Toolbar/Toolbar";
 import "./Layout.css";
 import SideDrawer from "../Navigation/SideDrawer/SideDrawer";
@@ -7,14 +7,38 @@ interface LayoutProps {
   children: ReactElement<any, any>;
 }
 
-const layout: React.SFC<LayoutProps> = props => {
-  return (
-    <React.Fragment>
-      <Toolbar />
-      <SideDrawer />
-      <main className="content">{props.children}</main>
-    </React.Fragment>
-  );
-};
+interface LayoutState {
+  showSideDrawer: boolean;
+}
 
-export default layout;
+class Layout extends Component<LayoutProps, LayoutState> {
+  constructor(props: LayoutProps) {
+    super(props);
+    this.state = {
+      showSideDrawer: true
+    };
+  }
+
+  sideDrawerClosedHandler = () => {
+    this.setState({ showSideDrawer: false });
+  };
+
+  sideDrawerToggleHandler = () => {
+    this.setState({ showSideDrawer: !this.state.showSideDrawer });
+  };
+
+  render() {
+    return (
+      <React.Fragment>
+        <Toolbar drawerToggleClicked={this.sideDrawerToggleHandler} />
+        <SideDrawer
+          open={this.state.showSideDrawer}
+          closed={this.sideDrawerClosedHandler}
+        />
+        <main className="content">{this.props.children}</main>
+      </React.Fragment>
+    );
+  }
+}
+
+export default Layout;

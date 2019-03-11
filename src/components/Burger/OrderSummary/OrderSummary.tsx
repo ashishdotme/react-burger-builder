@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import Button from "../../UI/Button/Button";
 interface OrderSummaryProps {
   ingredients: {
@@ -8,34 +8,42 @@ interface OrderSummaryProps {
   purchaseContinued: () => void;
   purchaseCanceled: () => void;
 }
-const OrderSummary: React.SFC<OrderSummaryProps> = props => {
-  const ingredientSummary = Object.keys(props.ingredients).map(
+
+interface OrderSummaryState {}
+
+class OrderSummary extends Component<OrderSummaryProps, OrderSummaryState> {
+  constructor(props: any) {
+    super(props);
+  }
+  ingredientSummary = Object.keys(this.props.ingredients).map(
     (igKey, index) => {
       return (
         <li key={index}>
           <span style={{ textTransform: "capitalize" }}>{igKey}</span>:{" "}
-          {props.ingredients[igKey]}
+          {this.props.ingredients[igKey]}
         </li>
       );
     }
   );
-  return (
-    <div>
-      <h3>Your Order</h3>
-      <p>A delicious burger with the following ingredients</p>
-      <ul>{ingredientSummary}</ul>
-      <p>
-        <strong>Total Price: {props.price.toFixed(2)}</strong>
-      </p>
-      <p>Continue to Checkout</p>
-      <Button btnType="Danger" clicked={props.purchaseCanceled}>
-        CANCEL
-      </Button>
-      <Button btnType="Success" clicked={props.purchaseContinued}>
-        CONTINUE
-      </Button>
-    </div>
-  );
-};
+  render() {
+    return (
+      <div>
+        <h3>Your Order</h3>
+        <p>A delicious burger with the following ingredients</p>
+        <ul>{this.ingredientSummary}</ul>
+        <p>
+          <strong>Total Price: {this.props.price.toFixed(2)}</strong>
+        </p>
+        <p>Continue to Checkout</p>
+        <Button btnType="Danger" clicked={this.props.purchaseCanceled}>
+          CANCEL
+        </Button>
+        <Button btnType="Success" clicked={this.props.purchaseContinued}>
+          CONTINUE
+        </Button>
+      </div>
+    );
+  }
+}
 
 export default OrderSummary;
