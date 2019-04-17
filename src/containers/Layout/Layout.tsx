@@ -1,7 +1,7 @@
 import React, { ReactElement, Component } from "react";
-import Toolbar from "../Navigation/Toolbar/Toolbar";
+import Toolbar from "../../components/Navigation/Toolbar/Toolbar";
 import "./Layout.css";
-import SideDrawer from "../Navigation/SideDrawer/SideDrawer";
+import SideDrawer from "../../components/Navigation/SideDrawer/SideDrawer";
 
 interface LayoutProps {
   children: ReactElement<any, any>;
